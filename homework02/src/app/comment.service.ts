@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,4 +15,13 @@ export class CommentService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
+  updateComment(commentDetail: any): Observable<any> {
+    // Güncelleme işlemi yerine burada veriyi döndürüyoruz
+    return of(commentDetail);
+  }
+
+  addComment(newComment: any): Observable<any> {
+    // Kullanıcı ekleme işlemi yerine burada veriyi döndürüyoruz
+    return of(newComment);
+  }
 }

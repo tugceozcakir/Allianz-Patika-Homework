@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 
 
 @Injectable({
@@ -13,4 +14,14 @@ export class PostService {
 
   getPosts() {
     return this.http.get<any[]>(this.apiUrl);
-  }}
+  }
+  updatePost(postDetail: any): Observable<any> {
+    // Güncelleme işlemi yerine burada veriyi döndürüyoruz
+    return of(postDetail);
+  }
+
+  addPost(newPost: any): Observable<any> {
+    // Kullanıcı ekleme işlemi yerine burada veriyi döndürüyoruz
+    return of(newPost);
+  }
+}

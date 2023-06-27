@@ -11,6 +11,13 @@ export class CategoryDetailComponent implements OnInit {
   categoryId: string | null;
   categoryDetail: any = {};
 
+  initialCategoryDetails: any = {};
+  editedCategoryName: string = '';
+  changes: string = '';
+  saveStatus: string = '';
+  isChanged: boolean = false;
+
+
   constructor(
     private route: ActivatedRoute,
     private categoryService: CategoryService
@@ -21,9 +28,9 @@ export class CategoryDetailComponent implements OnInit {
   ngOnInit() {
     this.categoryId = this.route.snapshot.paramMap.get('categoryId');
     console.log('Comment ID:', this.categoryId);
-    this.fetchCommentDetails();
+    this.fetchCategoryDetails();
   }
-  fetchCommentDetails() {
+  fetchCategoryDetails() {
     if (this.categoryId !== null) {
       this.categoryService.getCategory().subscribe(
         (data) => {
@@ -37,7 +44,28 @@ export class CategoryDetailComponent implements OnInit {
       );
     }
   }
-  
+  saveChanges() {
+    this.categoryDetail.title = this.editedCategoryName;
+    this.isChanged = false;
+
+    this.changes = `Category Name: ${this.editedCategoryName}`;
+
+    this.categoryService.updateCategory(this.categoryDetail).subscribe(
+      (response) => {
+        console.log('Kullanıcı detayları başarıyla güncellendi:', response);
+        this.saveStatus = 'Changes saved successfully!';
+      },
+      (error) => {
+        console.error('Kullanıcı detaylarını güncellerken hata oluştu:', error);
+        this.saveStatus = 'Error saving changes.';
+      }
+    );
+  }
+
+  onChange() {
+    const isTitleChanged = this.initialCategoryDetails.title !== this.editedCategoryName;
+    this.isChanged = isTitleChanged
+  }
   
 }
 
