@@ -16,6 +16,7 @@ import { RouterModule } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.component';
 import { DeleteUserDialogComponentComponent } from './delete-user-dialog-component/delete-user-dialog-component.component'; // Import RouterModule
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { DeleteUserDialogComponentComponent } from './delete-user-dialog-compone
     FormsModule,
     HttpClientModule,
     MatDialogModule,
+    ReactiveFormsModule
   ],
   providers: [MatDialog],
   bootstrap: [AppComponent]

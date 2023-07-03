@@ -1,3 +1,23 @@
+<!-- Filter field -->
+<div class="container">
+  <div class="filter-container">
+    <div>
+      <label for="userId">User ID:</label>
+      <input type="number" id="userId" [(ngModel)]="filter.userId">
+    </div>
+    <div>
+      <label for="postId">Post ID:</label>
+      <input type="number" id="postId" [(ngModel)]="filter.postId">
+    </div>
+    <div>
+      <label for="categoryId">Category ID:</label>
+      <input type="number" id="categoryId" [(ngModel)]="filter.categoryId">
+    </div>
+    <button (click)="applyFilters(filter.userId, filter.postId, filter.categoryId)">Filter</button>
+  </div>
+</div>
+
+
 <table>
   <thead>
     <tr>

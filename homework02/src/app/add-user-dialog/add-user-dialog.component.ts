@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { User } from '../models/user.model';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-user-dialog',
@@ -10,32 +10,37 @@ import { Router } from '@angular/router';
 })
 export class AddUserDialogComponent implements OnInit {
   newUser: User = new User();
+  userForm: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<AddUserDialogComponent>, public router: Router) {}
+  constructor(
+    public dialogRef: MatDialogRef<AddUserDialogComponent>,
+    private formBuilder: FormBuilder
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.initializeForm();
+  }
+
+  initializeForm() {
+    this.userForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]]
+    });
+  }
 
   addUser() {
-    if (this.isFormInvalid()) {
+    if (this.userForm.invalid) {
       return;
     }
-    
+
+    this.newUser.username = this.userForm.value.username;
+    this.newUser.email = this.userForm.value.email;
+
     this.dialogRef.close(this.newUser);
   }
 
   cancel() {
     this.dialogRef.close();
   }
-
-  isFormInvalid(): boolean {
-    return !this.newUser.username || !this.newUser.email;
-  }
-
-  applyFilters(userId: number, postId: number, categoryId: number) {
-    this.router.navigate([], {
-      queryParams: { userId, postId, categoryId },
-      queryParamsHandling: 'merge'
-    });
-  }
-  
 }
+

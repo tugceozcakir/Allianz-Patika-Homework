@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../post.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../models/post.model';
 
 @Component({
@@ -14,10 +14,25 @@ export class PostListComponent implements OnInit {
   pageSize: number = 10;
   totalItems: number = 0;
   displayedPosts: Post[] = [];
+  filteredPosts: Post[] = [];
 
-  constructor(private postService: PostService, private router: Router) {}
+  filter = {
+    userId: undefined,
+    postId: undefined,
+    categoryId: undefined
+  };
+
+  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute,
+    ) {}
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.filter.userId = params['userId'] ? +params['userId'] : undefined;
+      this.filter.postId = params['postId'] ? +params['postId'] : undefined;
+      this.filter.categoryId = params['categoryId'] ? +params['categoryId'] : undefined;
+      this.applyFilters(this.filter.userId, this.filter.postId, this.filter.categoryId);
+    });
+
     this.postService.getPosts().subscribe((data: Post[]) => {
       this.posts = data;
       this.totalItems = this.posts.length;
@@ -28,8 +43,21 @@ export class PostListComponent implements OnInit {
   updateDisplayedPosts() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
-    this.displayedPosts = this.posts.slice(startIndex, endIndex);
+    
+    if (this.filter.userId || this.filter.postId || this.filter.categoryId) {
+      this.filteredPosts = this.posts
+        .filter(post => 
+          (!this.filter.userId || post.userId === this.filter.userId) &&
+          (!this.filter.postId || post.postId === this.filter.postId) &&
+          (!this.filter.categoryId || post.categoryId === this.filter.categoryId)
+        );
+    } else {
+      this.filteredPosts = this.posts;
+    }
+    
+    this.displayedPosts = this.filteredPosts.slice(startIndex, endIndex);
   }
+  
 
   nextPage() {
     const totalPages = Math.ceil(this.totalItems / this.pageSize);
@@ -59,4 +87,13 @@ export class PostListComponent implements OnInit {
     this.posts.splice(index, 1);
     this.updateDisplayedPosts(); // displayedPosts dizisini güncelleyin
   }
+
+  applyFilters(userId: number, postId: number, categoryId: number) {
+    this.filter.userId = userId;
+    this.filter.postId = postId;
+    this.filter.categoryId = categoryId;
+    this.updateDisplayedPosts();
+  }
+  
+  
 }
