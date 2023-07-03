@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommentService } from '../comment.service';
+import { Comment } from '../models/comment.model';
 
 @Component({
   selector: 'app-comment-detail',
@@ -9,9 +10,9 @@ import { CommentService } from '../comment.service';
 })
 export class CommentDetailComponent implements OnInit {
   commentId: string | null;
-  commentDetail: any = {};
+  commentDetail: Comment = new Comment();
 
-  initialCommentDetails: any = {};
+  initialCommentDetails: Comment = new Comment();
   editedComment: string = '';
   changes: string = '';
   saveStatus: string = '';
@@ -35,39 +36,40 @@ export class CommentDetailComponent implements OnInit {
   fetchCommentDetails() {
     if (this.commentId !== null) {
       this.commentService.getComments().subscribe(
-        (data) => {
+        (data: Comment[]) => {
           console.log('Comments Data:', data);
-          this.commentDetail = data.find((comment) => comment.commentId === parseInt(this.commentId!));
-          console.log('Comment Detail:', this.commentDetail);
+          this.commentDetail = data.find((comment) => comment.commentId === parseInt(this.commentId!)) || new Comment();
+          this.editedComment = this.commentDetail.comment;
+          this.initialCommentDetails = { ...this.commentDetail };
         },
         (error) => {
-          console.error('Error fetching post details:', error);
+          console.error('Error fetching comment details:', error);
         }
       );
     }
   }
 
   saveChanges() {
-    this.commentDetail.title = this.editedComment;
+    this.commentDetail.comment = this.editedComment;
     this.isChanged = false;
 
     this.changes = `Comment: ${this.editedComment}`;
 
     this.commentService.updateComment(this.commentDetail).subscribe(
       (response) => {
-        console.log('Kullanıcı detayları başarıyla güncellendi:', response);
+        console.log('Comment details updated successfully:', response);
         this.saveStatus = 'Changes saved successfully!';
       },
       (error) => {
-        console.error('Kullanıcı detaylarını güncellerken hata oluştu:', error);
+        console.error('Error saving comment changes:', error);
         this.saveStatus = 'Error saving changes.';
       }
     );
   }
 
   onChange() {
-    const isTitleChanged = this.initialCommentDetails.title !== this.editedComment;
-    this.isChanged = isTitleChanged
+    const isCommentChanged = this.initialCommentDetails.comment !== this.editedComment;
+    this.isChanged = isCommentChanged;
   }
   
 }

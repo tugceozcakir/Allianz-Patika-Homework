@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PostService } from '../post.service';
+import { Post } from '../models/post.model';
 
 @Component({
   selector: 'app-post-detail',
@@ -9,12 +10,8 @@ import { PostService } from '../post.service';
 })
 export class PostDetailComponent implements OnInit {
   postId: string | null;
-  postDetail: any = {
-    postId: '',
-    title: '',
-    content: ''
-  };
-  initialPostDetails: any = {};
+  postDetail: Post = new Post();
+  initialPostDetails: Post = new Post();
   editedTitle: string = '';
   editedContent: string = '';
   changes: string = '';
@@ -30,7 +27,6 @@ export class PostDetailComponent implements OnInit {
 
   ngOnInit() {
     this.postId = this.route.snapshot.paramMap.get('postId');
-    console.log(this.postId);
     this.fetchPostDetails();
   }
 
@@ -38,7 +34,6 @@ export class PostDetailComponent implements OnInit {
     if (this.postId !== null) {
       this.postService.getPosts().subscribe(
         (data) => {
-          console.log('Post Data:', data);
           this.postDetail = data.find((post) => post.postId === parseInt(this.postId!));
           this.editedTitle = this.postDetail.title;
           this.editedContent = this.postDetail.content;
@@ -60,11 +55,11 @@ export class PostDetailComponent implements OnInit {
 
     this.postService.updatePost(this.postDetail).subscribe(
       (response) => {
-        console.log('Kullanıcı detayları başarıyla güncellendi:', response);
+        console.log('Post details updated successfully:', response);
         this.saveStatus = 'Changes saved successfully!';
       },
       (error) => {
-        console.error('Kullanıcı detaylarını güncellerken hata oluştu:', error);
+        console.error('Error updating post details:', error);
         this.saveStatus = 'Error saving changes.';
       }
     );

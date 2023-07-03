@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CategoryService } from '../category.service';
+import { Category } from '../models/category.model';
 
 @Component({
   selector: 'app-category-detail',
@@ -9,9 +10,9 @@ import { CategoryService } from '../category.service';
 })
 export class CategoryDetailComponent implements OnInit {
   categoryId: string | null;
-  categoryDetail: any = {};
+  categoryDetail: Category = new Category();
 
-  initialCategoryDetails: any = {};
+  initialCategoryDetails: Category = new Category();
   editedCategoryName: string = '';
   changes: string = '';
   saveStatus: string = '';
@@ -27,15 +28,16 @@ export class CategoryDetailComponent implements OnInit {
 
   ngOnInit() {
     this.categoryId = this.route.snapshot.paramMap.get('categoryId');
-    console.log('Comment ID:', this.categoryId);
+    console.log('Category ID:', this.categoryId);
     this.fetchCategoryDetails();
   }
+
   fetchCategoryDetails() {
     if (this.categoryId !== null) {
       this.categoryService.getCategory().subscribe(
-        (data) => {
+        (data: Category[]) => {
           console.log('Category Data:', data);
-          this.categoryDetail = data.find((category) => category.categoryId === parseInt(this.categoryId!));
+          this.categoryDetail = data.find((category) => category.categoryId === parseInt(this.categoryId!)) || new Category();
           console.log('Category Detail:', this.categoryDetail);
         },
         (error) => {
@@ -44,28 +46,28 @@ export class CategoryDetailComponent implements OnInit {
       );
     }
   }
+
   saveChanges() {
-    this.categoryDetail.title = this.editedCategoryName;
+    this.categoryDetail.name = this.editedCategoryName;
     this.isChanged = false;
 
     this.changes = `Category Name: ${this.editedCategoryName}`;
 
     this.categoryService.updateCategory(this.categoryDetail).subscribe(
       (response) => {
-        console.log('Kullanıcı detayları başarıyla güncellendi:', response);
+        console.log('Category details successfully updated:', response);
         this.saveStatus = 'Changes saved successfully!';
       },
       (error) => {
-        console.error('Kullanıcı detaylarını güncellerken hata oluştu:', error);
+        console.error('Error while saving category changes:', error);
         this.saveStatus = 'Error saving changes.';
       }
     );
   }
 
   onChange() {
-    const isTitleChanged = this.initialCategoryDetails.title !== this.editedCategoryName;
-    this.isChanged = isTitleChanged
+    const isNameChanged = this.initialCategoryDetails.name !== this.editedCategoryName;
+    this.isChanged = isNameChanged;
   }
-  
-}
 
+}

@@ -1,31 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../category.service';
 import { Router } from '@angular/router';
+import { Category } from '../models/category.model';
 
 @Component({
   selector: 'app-category-list',
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.css']
 })
-export class CategoryListComponent {
-  categories: any[] = [];
+export class CategoryListComponent implements OnInit {
+  categories: Category[] = [];
   currentPage: number = 1;
   pageSize: number = 3;
   totalItems: number = 0;
-  displayedCategories: any[] = [];
+  displayedCategories: Category[] = [];
 
   constructor(private categoryService: CategoryService, private router: Router) {}
 
-
   ngOnInit() {
-    this.categoryService.getCategory().subscribe((data: any[]) => {
+    this.categoryService.getCategory().subscribe((data: Category[]) => {
       this.categories = data;
       this.totalItems = this.categories.length;
-      this.updateDisplayedComments();
+      this.updateDisplayedCategories();
     });
   }
 
-  updateDisplayedComments() {
+  updateDisplayedCategories() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     this.displayedCategories = this.categories.slice(startIndex, endIndex);
@@ -35,7 +35,7 @@ export class CategoryListComponent {
     const totalPages = Math.ceil(this.totalItems / this.pageSize);
     if (this.currentPage < totalPages) {
       this.currentPage++;
-      this.updateDisplayedComments();
+      this.updateDisplayedCategories();
     }
   }
 
@@ -47,7 +47,7 @@ export class CategoryListComponent {
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.updateDisplayedComments();
+      this.updateDisplayedCategories();
     }
   }
 
@@ -57,7 +57,6 @@ export class CategoryListComponent {
 
   deleteCategory(index: number) {
     this.categories.splice(index, 1);
-    this.updateDisplayedComments(); // displayedUsers dizisini güncelleyin
+    this.updateDisplayedCategories();
   }
-  
 }

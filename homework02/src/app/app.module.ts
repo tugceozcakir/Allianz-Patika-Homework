@@ -12,7 +12,10 @@ import { CommentListComponent } from './comment-list/comment-list.component';
 import { CommentDetailComponent } from './comment-detail/comment-detail.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router'; // Import RouterModule
+import { RouterModule } from '@angular/router';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.component';
+import { DeleteUserDialogComponentComponent } from './delete-user-dialog-component/delete-user-dialog-component.component'; // Import RouterModule
 
 @NgModule({
   declarations: [
@@ -24,16 +27,19 @@ import { RouterModule } from '@angular/router'; // Import RouterModule
     CategoryListComponent,
     CategoryDetailComponent,
     CommentListComponent,
-    CommentDetailComponent
+    CommentDetailComponent,
+    AddUserDialogComponent,
+    DeleteUserDialogComponentComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule, // Include RouterModule
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDialogModule,
   ],
-  providers: [],
+  providers: [MatDialog],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

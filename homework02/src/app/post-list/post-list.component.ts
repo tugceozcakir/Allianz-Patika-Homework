@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../post.service';
 import { Router } from '@angular/router';
+import { Post } from '../models/post.model';
 
 @Component({
   selector: 'app-post-list',
@@ -8,16 +9,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./post-list.component.css']
 })
 export class PostListComponent implements OnInit {
-  posts: any[] = [];
+  posts: Post[] = [];
   currentPage: number = 1;
   pageSize: number = 10;
   totalItems: number = 0;
-  displayedPosts: any[] = [];
+  displayedPosts: Post[] = [];
 
   constructor(private postService: PostService, private router: Router) {}
 
   ngOnInit() {
-    this.postService.getPosts().subscribe((data: any[]) => {
+    this.postService.getPosts().subscribe((data: Post[]) => {
       this.posts = data;
       this.totalItems = this.posts.length;
       this.updateDisplayedPosts();
@@ -53,10 +54,9 @@ export class PostListComponent implements OnInit {
   canPrevious(): boolean {
     return this.currentPage > 1;
   }
-  
+
   deletePost(index: number) {
     this.posts.splice(index, 1);
-    this.updateDisplayedPosts(); // displayedUsers dizisini güncelleyin
+    this.updateDisplayedPosts(); // displayedPosts dizisini güncelleyin
   }
-  
 }

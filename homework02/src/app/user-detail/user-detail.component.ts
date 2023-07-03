@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../user.service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-user-detail',
@@ -8,12 +9,12 @@ import { UserService } from '../user.service';
   styleUrls: ['./user-detail.component.css']
 })
 export class UserDetailComponent implements OnInit {
-  userId: string | null;
-  userDetails: any = {};
+  userId: number | null;
+  userDetails: User = new User(); 
   isChanged: boolean = false;
 
   // Düzenleme için gerekli değişkenler
-  initialUserDetails: any = {}; // İlk kullanıcı detaylarını saklamak için değişken
+  initialUserDetails: User = new User(); // İlk kullanıcı detaylarını saklamak için değişken
   editedUsername: string = '';
   editedEmail: string = '';
   changes: string = ''; // Yapılan değişiklikleri tutacak değişken
@@ -27,24 +28,51 @@ export class UserDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userId = this.route.snapshot.paramMap.get('userId');
     this.fetchUserDetails();
+    this.subscribeToNewUser(); // Yeni kullanıcıları dinle
   }
-
   fetchUserDetails() {
-    if (this.userId !== null) {
+    const userIdParam = this.route.snapshot.paramMap.get('userId');
+    if (userIdParam !== null) {
+      this.userId = +userIdParam;
       this.userService.getUsers().subscribe(
-        (data) => {
-          this.userDetails = data.find((user) => user.userId === parseInt(this.userId!));
-          this.editedUsername = this.userDetails.username; // Düzenleme için username'i atama
-          this.editedEmail = this.userDetails.email; // Düzenleme için email'i atama
-          this.initialUserDetails = { ...this.userDetails }; // İlk kullanıcı detaylarını saklama
+        (data: User | User[]) => {
+          if (Array.isArray(data)) {
+            this.userDetails = data.find((user) => user.userId === this.userId) || new User();
+          } else {
+            this.userDetails = data || new User();
+          }
+          
+          if (this.userDetails.userId !== undefined) {
+            this.editedUsername = this.userDetails.username;
+            this.editedEmail = this.userDetails.email;
+            this.initialUserDetails = { ...this.userDetails };
+          } else {
+            console.error('User not found');
+          }
         },
         (error) => {
           console.error('Error fetching user details:', error);
         }
       );
+    } else {
+      this.userId = null;
     }
+  }
+  
+  
+  
+
+  subscribeToNewUser() {
+    this.userService.getNewUser().subscribe((user: User) => {
+      if (user.userId === this.userId) {
+        // Yeni eklenen kullanıcının detaylarını güncelle
+        this.userDetails = user;
+        this.editedUsername = this.userDetails.username;
+        this.editedEmail = this.userDetails.email;
+        this.initialUserDetails = { ...this.userDetails };
+      }
+    });
   }
 
   saveChanges() {
@@ -52,7 +80,6 @@ export class UserDetailComponent implements OnInit {
     this.userDetails.username = this.editedUsername;
     this.userDetails.email = this.editedEmail;
     this.isChanged = false;
-
 
     // Değişiklikleri göstermek için changes değişkenini güncelleme
     this.changes = `Username: ${this.editedUsername}, Email: ${this.editedEmail}`;
@@ -75,5 +102,4 @@ export class UserDetailComponent implements OnInit {
     const isEmailChanged = this.initialUserDetails.email !== this.editedEmail;
     this.isChanged = isUsernameChanged || isEmailChanged;
   }
-  
 }

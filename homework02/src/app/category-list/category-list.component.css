@@ -26,10 +26,6 @@ tr:hover {
   background-color: #d0e5f2;
 }
 
-.button-container {
-  margin-top: 10px;
-}
-
 /* Remove button */
 #remove {
     display: flex;
@@ -84,3 +80,15 @@ tr:hover {
    .tooltip:hover .tooltiptext {
     visibility: visible;
    }
+
+/* Next and previous button */
+.previousOrNextButton {
+  text-align: right;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: 8%;
+}
+
+#nextButton {
+  margin-left: 10px;
+}

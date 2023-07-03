@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommentService } from '../comment.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Comment } from '../models/comment.model';
 
 @Component({
   selector: 'app-comment-list',
@@ -8,18 +9,17 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./comment-list.component.css']
 })
 export class CommentListComponent implements OnInit {
-  comments: any[] = [];
+  comments: Comment[] = [];
   currentPage: number = 1;
   pageSize: number = 10;
   totalItems: number = 0;
-  displayedComments: any[] = [];
+  displayedComments: Comment[] = [];
   categoryId: string | null = null;
 
-
-  constructor(private userService: CommentService, private router: Router) {}
+  constructor(private commentService: CommentService, private router: Router) {}
 
   ngOnInit() {
-    this.userService.getComments().subscribe((data: any[]) => {
+    this.commentService.getComments().subscribe((data: Comment[]) => {
       this.comments = data;
       this.totalItems = this.comments.length;
       this.updateDisplayedComments();
@@ -58,7 +58,6 @@ export class CommentListComponent implements OnInit {
 
   deleteComment(index: number) {
     this.comments.splice(index, 1);
-    this.updateDisplayedComments(); // displayedUsers dizisini güncelleyin
+    this.updateDisplayedComments();
   }
-  
 }

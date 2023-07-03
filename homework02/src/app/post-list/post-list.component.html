@@ -26,7 +26,7 @@
   </tbody>
 </table>
 
-<div class="button-container">
+<div class="previousOrNextButton">
   <button (click)="previousPage()" [disabled]="!canPrevious()">Previous</button>
-  <button (click)="nextPage()" [disabled]="!canNext()">Next Page</button>
+  <button id="nextButton" (click)="nextPage()" [disabled]="!canNext()">Next Page</button>
 </div>

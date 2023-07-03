@@ -1,0 +1,15 @@
+<div class="mat-dialog-container">
+  <h2>Add User</h2>
+  <div>
+    <label for="name">Name</label>
+    <input type="text" id="name" [(ngModel)]="newUser.username">
+  </div>
+  <div>
+    <label for="email">Email</label>
+    <input type="text" id="email" [(ngModel)]="newUser.email">
+  </div>
+  <div class="buttons-container">
+    <button (click)="addUser()" [disabled]="isFormInvalid()">Add</button>
+    <button (click)="cancel()">Cancel</button>
+  </div>
+</div>
