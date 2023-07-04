@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PostService } from '../post.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../models/post.model';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AddPostDialogComponent } from '../add-post-dialog/add-post-dialog.component';
 
 @Component({
   selector: 'app-post-list',
@@ -22,7 +24,11 @@ export class PostListComponent implements OnInit {
     categoryId: undefined
   };
 
-  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute,
+  constructor(
+    private postService: PostService, 
+    private router: Router,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
     ) {}
 
   ngOnInit() {
@@ -95,5 +101,23 @@ export class PostListComponent implements OnInit {
     this.updateDisplayedPosts();
   }
   
+  addPost() {
+    const dialogRef: MatDialogRef<AddPostDialogComponent> = this.dialog.open(AddPostDialogComponent, {
+      width: '30%',
+    });
+  
+    dialogRef.afterClosed().subscribe((result: Post) => {
+      if (result) {
+        // Yeni kullanıcıyı listeye ekle
+        const lastPostId = this.posts.length > 0 ? this.posts[this.posts.length - 1].postId : 0;
+        result.postId = lastPostId + 1;
+        this.posts.push(result);
+  
+        // Diğer değişiklikleri güncelle
+        this.totalItems++;
+        this.updateDisplayedPosts();
+      }
+    });
+  }
   
 }

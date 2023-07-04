@@ -17,6 +17,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.component';
 import { DeleteUserDialogComponentComponent } from './delete-user-dialog-component/delete-user-dialog-component.component'; // Import RouterModule
 import { ReactiveFormsModule } from '@angular/forms';
+import { AddPostDialogComponent } from './add-post-dialog/add-post-dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommentListComponent,
     CommentDetailComponent,
     AddUserDialogComponent,
-    DeleteUserDialogComponentComponent
+    DeleteUserDialogComponentComponent,
+    AddPostDialogComponent
   ],
   imports: [
     BrowserModule,

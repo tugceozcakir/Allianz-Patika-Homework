@@ -95,28 +95,54 @@ button:hover {
 /* Filter */
 .container {
   display: flex;
-  justify-content: flex-end;
-  margin-right: 8%;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 10px;
 }
 
 .filter-container {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .filter-container > div {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-right: 10px;
 }
 
 .filter-container input {
-  width: 150px; /* İstediğiniz genişlik değeri */
+  width: 150px;
   margin-left: 10px;
 }
 
 .filter-container button {
   margin-left: 10px;
+  padding: 7px 20px;
+  background-color: #999999;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+/* Add post button */
+#add-button {
+  margin-left: 86%;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#add-button:hover {
+  background-color: #45a049;
+}
+#add-button:focus {
+  outline: none;
 }
