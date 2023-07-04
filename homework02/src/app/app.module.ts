@@ -18,6 +18,9 @@ import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.compon
 import { DeleteUserDialogComponentComponent } from './delete-user-dialog-component/delete-user-dialog-component.component'; // Import RouterModule
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddPostDialogComponent } from './add-post-dialog/add-post-dialog.component';
+import { AddCommentDialogComponent } from './add-comment-dialog/add-comment-dialog.component';
+import { AddCategoryDialogComponent } from './add-category-dialog/add-category-dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +35,9 @@ import { AddPostDialogComponent } from './add-post-dialog/add-post-dialog.compon
     CommentDetailComponent,
     AddUserDialogComponent,
     DeleteUserDialogComponentComponent,
-    AddPostDialogComponent
+    AddPostDialogComponent,
+    AddCommentDialogComponent,
+    AddCategoryDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +46,7 @@ import { AddPostDialogComponent } from './add-post-dialog/add-post-dialog.compon
     FormsModule,
     HttpClientModule,
     MatDialogModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [MatDialog],
   bootstrap: [AppComponent]

@@ -92,3 +92,21 @@ tr:hover {
 #nextButton {
   margin-left: 10px;
 }
+
+/* Add category button */
+#add-button {
+  margin-left: 83%;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#add-button:hover {
+  background-color: #45a049;
+}
+#add-button:focus {
+  outline: none;
+}

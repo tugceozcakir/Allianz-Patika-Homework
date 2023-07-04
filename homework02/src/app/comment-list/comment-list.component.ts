@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommentService } from '../comment.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Comment } from '../models/comment.model';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AddCommentDialogComponent } from '../add-comment-dialog/add-comment-dialog.component';
 
 @Component({
   selector: 'app-comment-list',
@@ -16,7 +18,10 @@ export class CommentListComponent implements OnInit {
   displayedComments: Comment[] = [];
   categoryId: string | null = null;
 
-  constructor(private commentService: CommentService, private router: Router) {}
+  constructor(private commentService: CommentService, 
+    private router: Router,     
+    private dialog: MatDialog
+    ) {}
 
   ngOnInit() {
     this.commentService.getComments().subscribe((data: Comment[]) => {
@@ -59,5 +64,23 @@ export class CommentListComponent implements OnInit {
   deleteComment(index: number) {
     this.comments.splice(index, 1);
     this.updateDisplayedComments();
+  }
+  addComment() {
+    const dialogRef: MatDialogRef<AddCommentDialogComponent> = this.dialog.open(AddCommentDialogComponent, {
+      width: '30%',
+    });
+  
+    dialogRef.afterClosed().subscribe((result: Comment) => {
+      if (result) {
+        // Yeni kullanıcıyı listeye ekle
+        const lastCommentId = this.comments.length > 0 ? this.comments[this.comments.length - 1].commentId : 0;
+        result.commentId = lastCommentId + 1;
+        this.comments.push(result);
+  
+        // Diğer değişiklikleri güncelle
+        this.totalItems++;
+        this.updateDisplayedComments();
+      }
+    });
   }
 }
